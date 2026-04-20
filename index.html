@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Compte à rebours - 2 juin 18h</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #0f0f1a;
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .container {
+      text-align: center;
+      padding: 2rem;
+    }
+
+    h1 {
+      font-size: 1.4rem;
+      color: #888;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+
+    .target {
+      font-size: 1rem;
+      color: #555;
+      margin-bottom: 3rem;
+    }
+
+    .countdown {
+      display: flex;
+      gap: 2rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 3rem;
+    }
+
+    .unit {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .value {
+      font-size: 5rem;
+      font-weight: 700;
+      line-height: 1;
+      color: #fff;
+      min-width: 2ch;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .label {
+      font-size: 0.75rem;
+      color: #666;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-top: 0.5rem;
+    }
+
+    .separator {
+      font-size: 5rem;
+      font-weight: 300;
+      color: #333;
+      line-height: 1;
+      align-self: flex-start;
+    }
+
+    .total-minutes {
+      background: #1a1a2e;
+      border: 1px solid #2a2a4a;
+      border-radius: 12px;
+      padding: 1.2rem 2.5rem;
+      display: inline-block;
+    }
+
+    .total-minutes .minutes-value {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: #7c6af7;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .total-minutes .minutes-label {
+      font-size: 0.75rem;
+      color: #555;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-top: 0.3rem;
+    }
+
+    #expired {
+      display: none;
+      font-size: 2rem;
+      color: #7c6af7;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Compte à rebours</h1>
+    <p class="target">2 juin 2026 — 18h00</p>
+
+    <div class="countdown" id="countdown">
+      <div class="unit">
+        <span class="value" id="days">--</span>
+        <span class="label">Jours</span>
+      </div>
+      <div class="separator">:</div>
+      <div class="unit">
+        <span class="value" id="hours">--</span>
+        <span class="label">Heures</span>
+      </div>
+      <div class="separator">:</div>
+      <div class="unit">
+        <span class="value" id="minutes">--</span>
+        <span class="label">Minutes</span>
+      </div>
+      <div class="separator">:</div>
+      <div class="unit">
+        <span class="value" id="seconds">--</span>
+        <span class="label">Secondes</span>
+      </div>
+    </div>
+
+    <div class="total-minutes" id="total-block">
+      <div class="minutes-value" id="total-minutes">--</div>
+      <div class="minutes-label">Minutes au total</div>
+    </div>
+
+    <p id="expired">C'est l'heure !</p>
+  </div>
+
+  <script>
+    const target = new Date('2026-06-02T18:00:00');
+
+    function pad(n) {
+      return String(n).padStart(2, '0');
+    }
+
+    function tick() {
+      const now = new Date();
+      const diff = target - now;
+
+      if (diff <= 0) {
+        document.getElementById('countdown').style.display = 'none';
+        document.getElementById('total-block').style.display = 'none';
+        document.getElementById('expired').style.display = 'block';
+        return;
+      }
+
+      const totalSeconds = Math.floor(diff / 1000);
+      const days    = Math.floor(totalSeconds / 86400);
+      const hours   = Math.floor((totalSeconds % 86400) / 3600);
+      const minutes = Math.floor((totalSeconds % 3600) / 60);
+      const seconds = totalSeconds % 60;
+      const totalMinutes = Math.floor(totalSeconds / 60);
+
+      document.getElementById('days').textContent    = days;
+      document.getElementById('hours').textContent   = pad(hours);
+      document.getElementById('minutes').textContent = pad(minutes);
+      document.getElementById('seconds').textContent = pad(seconds);
+      document.getElementById('total-minutes').textContent = totalMinutes.toLocaleString('fr-FR');
+    }
+
+    tick();
+    setInterval(tick, 1000);
+  </script>
+</body>
+</html>
